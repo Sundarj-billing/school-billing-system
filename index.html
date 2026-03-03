@@ -3,56 +3,52 @@
 <head>
   <title>Sundarj School Billing</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
+    body { font-family: Arial; padding: 20px; }
     .container { max-width: 400px; margin: auto; }
     input { width: 100%; padding: 10px; margin: 5px 0; }
-    button { padding: 10px; width: 100%; background: #4CAF50; color: white; border: none; }
+    button { padding: 10px; width: 100%; background: green; color: white; border: none; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h2>Admin Login</h2>
-    <input type="email" id="email" placeholder="Enter email" />
-    <input type="password" id="password" placeholder="Enter password" />
-    <button onclick="login()">Login</button>
+<div class="container">
+  <h2>Admin Login</h2>
+  <input type="email" id="email" placeholder="Enter email">
+  <input type="password" id="password" placeholder="Enter password">
+  <button onclick="login()">Login</button>
+  <p id="msg"></p>
+</div>
 
-    <p id="msg"></p>
-  </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-
-  <script>
-   
   const firebaseConfig = {
-  apiKey: "AIzaSyADameTAYU9ZqPfIjI0C1HPgBpQZToVbkw",
+    apiKey: "AIzaSyADameTAYU9ZqPfIjI0C1HPgBpQZToVbkw",
   authDomain: "sundar-school-billing.firebaseapp.com",
   projectId: "sundar-school-billing",
   storageBucket: "sundar-school-billing.firebasestorage.app",
   messagingSenderId: "487882789199",
   appId: "1:487882789199:web:d271521aadeb1dfdfd353a",
   measurementId: "G-G2Z518S498"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
+  };
 
-    function login() {
-      const email = document.getElementById("email").value;
-      const pass = document.getElementById("password").value;
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-      firebase.auth().signInWithEmailAndPassword(email, pass)
-        .then(() => {
-          document.getElementById("msg").innerText = "Logged In Successfully!";
-          // later redirect to dashboard
-        })
-        .catch(err => {
-          document.getElementById("msg").innerText = err.message;
-        });
-    }
-  </script>
+  window.login = function() {
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
+
+    signInWithEmailAndPassword(auth, email, pass)
+      .then(() => {
+        document.getElementById("msg").innerText = "Logged In Successfully!";
+      })
+      .catch(error => {
+        document.getElementById("msg").innerText = error.message;
+      });
+  }
+</script>
 
 </body>
 </html>
