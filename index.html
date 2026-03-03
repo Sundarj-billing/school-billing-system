@@ -2,11 +2,51 @@
 <html>
 <head>
   <title>Sundarj School Billing</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .container { max-width: 400px; margin: auto; }
+    input { width: 100%; padding: 10px; margin: 5px 0; }
+    button { padding: 10px; width: 100%; background: #4CAF50; color: white; border: none; }
+  </style>
 </head>
 <body>
 
-  <h1>Welcome to Sundarj School Billing System</h1>
-  <p>Website Successfully Created ✅</p>
+  <div class="container">
+    <h2>Admin Login</h2>
+    <input type="email" id="email" placeholder="Enter email" />
+    <input type="password" id="password" placeholder="Enter password" />
+    <button onclick="login()">Login</button>
+
+    <p id="msg"></p>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const pass = document.getElementById("password").value;
+
+      firebase.auth().signInWithEmailAndPassword(email, pass)
+        .then(() => {
+          document.getElementById("msg").innerText = "Logged In Successfully!";
+          // later redirect to dashboard
+        })
+        .catch(err => {
+          document.getElementById("msg").innerText = err.message;
+        });
+    }
+  </script>
 
 </body>
 </html>
