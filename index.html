@@ -224,8 +224,43 @@ window.markPaid = async function(id) {
   });
 
   await updateDoc(studentRef, { payments: payments });
-
+ printReceipt(data.name, data.class, data.fee, currentMonth, today);
+  
   loadStudents();
 }
 
+window.printReceipt = function(name, studentClass, fee, month, date) {
+
+  const receiptWindow = window.open("", "Receipt", "width=400,height=600");
+
+  receiptWindow.document.write(`
+    <html>
+    <head>
+      <title>Payment Receipt</title>
+      <style>
+        body { font-family: Arial; padding:20px; }
+        h2 { text-align:center; }
+        hr { margin:10px 0; }
+      </style>
+    </head>
+    <body>
+      <h2>Sundarj School</h2>
+      <hr>
+      <p><b>Student Name:</b> ${name}</p>
+      <p><b>Class:</b> ${studentClass}</p>
+      <p><b>Month:</b> ${month}</p>
+      <p><b>Amount Paid:</b> ₹${fee}</p>
+      <p><b>Payment Date:</b> ${date}</p>
+      <p><b>Receipt ID:</b> ${Math.floor(Math.random()*100000)}</p>
+      <hr>
+      <p style="text-align:center;">Thank You ✅</p>
+    </body>
+    </html>
+  `);
+
+  receiptWindow.document.close();
+  receiptWindow.print();
+}
+
+  
 </script>
