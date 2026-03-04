@@ -48,6 +48,8 @@
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   
   const firebaseConfig = {
     apiKey: "AIzaSyADameTAYU9ZqPfIjI0C1HPgBpQZToVbkw",
@@ -116,13 +118,24 @@
   const list = document.getElementById("studentList");
   list.innerHTML = "";
 
-  querySnapshot.forEach((doc) => {
-    const data = doc.data();
+  querySnapshot.forEach((documentItem) => {
+    const data = documentItem.data();
     const li = document.createElement("li");
-    li.textContent = data.name + " | Class: " + data.class + " | Fee: " + data.fee;
+
+    li.innerHTML = `
+      ${data.name} | Class: ${data.class} | Fee: ${data.fee}
+      <button onclick="deleteStudent('${documentItem.id}')">Delete</button>
+    `;
+
     list.appendChild(li);
   });
 }
+
+  window.deleteStudent = async function(id) {
+  await deleteDoc(doc(db, "students", id));
+  loadStudents();
+}
+  
   
 </script>
   
