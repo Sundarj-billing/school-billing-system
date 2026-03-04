@@ -134,15 +134,14 @@
   let totalCollected = 0;
 
   querySnapshot.forEach((docItem) => {
-    const data = docItem.data();
-    const li = document.createElement("li");
+    const payments = data.payments || [];
+    const isPaid = payments.some(p => p.month === currentMonth);
+
     
     totalStudents++;
     totalExpected += Number(data.fee);
 
-    const payments = data.payments || [];
-    const isPaid = payments.some(p => p.month === currentMonth);
-
+    import { getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     if (isPaid) {
       totalCollected += Number(data.fee);
