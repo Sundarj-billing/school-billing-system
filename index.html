@@ -180,7 +180,7 @@
     loadStudents();
   }
 
-
+// MARK PAID
  async function markPaid(id) {
   const studentRef = doc(db, "students", id);
   const studentSnap = await getDoc(studentRef);
@@ -191,7 +191,7 @@
 
   let payments = data.payments || [];
 
-  // Check already paid কিনা
+  // Check already paid
   const alreadyPaid = payments.some(p => p.month === currentMonth);
 
   if (alreadyPaid) {
