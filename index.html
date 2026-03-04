@@ -54,7 +54,8 @@
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } 
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+  import { getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  
   const firebaseConfig = {
     apiKey: "AIzaSyADameTAYU9ZqPfIjI0C1HPgBpQZToVbkw",
     authDomain: "sundar-school-billing.firebaseapp.com",
@@ -141,7 +142,6 @@
     totalStudents++;
     totalExpected += Number(data.fee);
 
-    import { getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     if (isPaid) {
       totalCollected += Number(data.fee);
