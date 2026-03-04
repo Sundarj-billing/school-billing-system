@@ -134,13 +134,15 @@
   let totalCollected = 0;
 
   querySnapshot.forEach((docItem) => {
-    const payments = data.payments || [];
-    const isPaid = payments.some(p => p.month === currentMonth);
-
+    const data = docItem.data();
+    const li = document.createElement("li");
+    
     totalStudents++;
     totalExpected += Number(data.fee);
 
-    const isPaid = data.paidMonth === currentMonth;
+    const payments = data.payments || [];
+    const isPaid = payments.some(p => p.month === currentMonth);
+
 
     if (isPaid) {
       totalCollected += Number(data.fee);
