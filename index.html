@@ -180,7 +180,7 @@
     loadStudents();
   }
 
-// MARK PAID
+// markPid()
  async function markPaid(id) {
   const studentRef = doc(db, "students", id);
   const studentSnap = await getDoc(studentRef);
