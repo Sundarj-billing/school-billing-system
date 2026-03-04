@@ -1,3 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sundarj School Billing</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .container { max-width: 500px; margin: auto; }
+    input { width: 100%; padding: 10px; margin: 5px 0; }
+    button { padding: 10px; width: 100%; background: green; color: white; border: none; margin-top:5px; }
+    #dashboard { display:none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- LOGIN SECTION -->
+  <div id="loginSection">
+    <h2>Admin Login</h2>
+    <input type="email" id="email" placeholder="Enter email">
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="login()">Login</button>
+    <p id="msg"></p>
+  </div>
+
+  <!-- DASHBOARD SECTION -->
+  <div id="dashboard">
+    <h2>Admin Dashboard 🎉</h2>
+
+<h3>Add Student</h3>
+
+<input type="text" id="studentName" placeholder="Student Name">
+<input type="text" id="studentClass" placeholder="Class">
+<input type="number" id="studentFee" placeholder="Monthly Fee">
+
+<button onclick="addStudent()">Add Student</button>
+
+<p id="status"></p>
+<h3>Student List</h3>
+<ul id="studentList"></ul>
+    
+<button onclick="logout()">Logout</button>
+
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } 
