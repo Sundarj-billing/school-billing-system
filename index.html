@@ -134,8 +134,8 @@
   let totalCollected = 0;
 
   querySnapshot.forEach((docItem) => {
-    const data = docItem.data();
-    const li = document.createElement("li");
+    const payments = data.payments || [];
+    const isPaid = payments.some(p => p.month === currentMonth);
 
     totalStudents++;
     totalExpected += Number(data.fee);
@@ -155,7 +155,14 @@
       <button onclick="deleteStudent('${docItem.id}')">Delete</button>
       <hr>
     `;
+     let historyHTML = "<br><b>Payment History:</b><br>";
 
+     payments.forEach(p => {
+     historyHTML += `${p.month} (${p.date}) <br>`;
+     });
+
+    li.innerHTML += historyHTML;
+    
     list.appendChild(li);
   });
 
@@ -172,12 +179,30 @@
   }
 
 
-  window.markPaid = async function(id) {
-  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+ async function markPaid(id) {
+  const studentRef = doc(db, "students", id);
+  const studentSnap = await getDoc(studentRef);
+  const data = studentSnap.data();
 
-  await updateDoc(doc(db, "students", id), {
-    paidMonth: currentMonth
+  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+  const today = new Date().toISOString().split("T")[0];
+
+  let payments = data.payments || [];
+
+  // Check already paid কিনা
+  const alreadyPaid = payments.some(p => p.month === currentMonth);
+
+  if (alreadyPaid) {
+    alert("Already paid for this month!");
+    return;
+  }
+
+  payments.push({
+    month: currentMonth,
+    date: today
   });
+
+  await updateDoc(studentRef, { payments: payments });
 
   loadStudents();
 }
