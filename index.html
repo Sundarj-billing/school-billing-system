@@ -150,7 +150,7 @@
   }
 
 
-window.markPaid = async function(id) {
+  window.markPaid = async function(id) {
   const currentMonth = new Date().toLocaleString('default', { month: 'long' });
 
   await updateDoc(doc(db, "students", id), {
