@@ -47,7 +47,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } 
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } 
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } 
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -116,23 +116,32 @@
 }
 
   // LOAD STUDENTS
-  async function loadStudents() {
-    const querySnapshot = await getDocs(collection(db, "students"));
-    const list = document.getElementById("studentList");
-    list.innerHTML = "";
+ async function loadStudents() {
+  const querySnapshot = await getDocs(collection(db, "students"));
+  const list = document.getElementById("studentList");
+  list.innerHTML = "";
 
-    querySnapshot.forEach((docItem) => {
-      const data = docItem.data();
-      const li = document.createElement("li");
+  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
 
-      li.innerHTML = `
-        ${data.name} | Class: ${data.class} | Fee: ${data.fee}
-        <button onclick="deleteStudent('${docItem.id}')">Delete</button>
-      `;
+  querySnapshot.forEach((docItem) => {
+    const data = docItem.data();
+    const li = document.createElement("li");
 
-      list.appendChild(li);
-    });
-  }
+    const isPaid = data.paidMonth === currentMonth;
+
+    li.innerHTML = `
+      <b>${data.name}</b> | Class: ${data.class} | Fee: ${data.fee}
+      <br>
+      Status: ${isPaid ? "✅ Paid" : "❌ Unpaid"}
+      <br>
+      <button onclick="markPaid('${docItem.id}')">Mark Paid</button>
+      <button onclick="deleteStudent('${docItem.id}')">Delete</button>
+      <hr>
+    `;
+
+    list.appendChild(li);
+  });
+}
 
   // DELETE STUDENT
   window.deleteStudent = async function(id) {
@@ -140,4 +149,17 @@
     loadStudents();
   }
 
+    import { updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+window.markPaid = async function(id) {
+  const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+
+  await updateDoc(doc(db, "students", id), {
+    paidMonth: currentMonth
+  });
+
+  loadStudents();
+}
+  
 </script>
