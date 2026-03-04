@@ -123,29 +123,19 @@
 
   // LOAD STUDENTS
   
-  async function loadStudents() {
+ async function loadStudents() {
   const querySnapshot = await getDocs(collection(db, "students"));
   const list = document.getElementById("studentList");
   list.innerHTML = "";
 
   const currentMonth = new Date().toLocaleString('default', { month: 'long' });
 
-  let totalStudents = 0;
-  let totalExpected = 0;
-  let totalCollected = 0;
-
   querySnapshot.forEach((docItem) => {
+    const data = docItem.data();
+    const li = document.createElement("li");
+
     const payments = data.payments || [];
     const isPaid = payments.some(p => p.month === currentMonth);
-
-    
-    totalStudents++;
-    totalExpected += Number(data.fee);
-
-
-    if (isPaid) {
-      totalCollected += Number(data.fee);
-    }
 
     li.innerHTML = `
       <b>${data.name}</b> | Class: ${data.class} | Fee: ${data.fee}
@@ -154,18 +144,18 @@
       <br>
       <button onclick="markPaid('${docItem.id}')">Mark Paid</button>
       <button onclick="deleteStudent('${docItem.id}')">Delete</button>
-      <hr>
+      <br><b>Payment History:</b><br>
     `;
-     let historyHTML = "<br><b>Payment History:</b><br>";
 
-     payments.forEach(p => {
-     historyHTML += `${p.month} (${p.date}) <br>`;
-     });
+    payments.forEach(p => {
+      li.innerHTML += `${p.month} (${p.date}) <br>`;
+    });
 
-    li.innerHTML += historyHTML;
-    
+    li.innerHTML += "<hr>";
+
     list.appendChild(li);
   });
+}
 
   document.getElementById("totalStudents").innerText = totalStudents;
   document.getElementById("totalExpected").innerText = totalExpected;
