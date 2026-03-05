@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Parent Payment Portal</title>
+</head>
+<body>
+  <h2>Parent Login</h2>
+  
+  <input type="text" id="studentId" placeholder="Enter Student ID">
+  <button onclick="checkDue()">Check Due</button>
+
+  <h3 id="result"></h3>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyADameTAYU9ZqPfIjI0C1HPgBpQZToVbkw",
+      authDomain: "sundar-school-billing.firebaseapp.com",
+      projectId: "sundar-school-billing",
+      storageBucket: "sundar-school-billing.appspot.com",
+      messagingSenderId: "487882789199",
+      appId: "1:487882789199:web:bbef805c7d010bcdfd353a",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.checkDue = async function() {
+      const studentId = document.getElementById("studentId").value;
+      const docRef = doc(db, "students", studentId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const due = data.totalDue || 0;
+        const processing = Math.ceil(due * 0.02);
+        const totalPayable = due + processing;
+
+        document.getElementById("result").innerHTML =
+          `Due: ₹${due} <br>
+           Processing (2%): ₹${processing} <br>
+           Total Payable: ₹${totalPayable}`;
+      } else {
+        document.getElementById("result").innerHTML = "Student not found!";
+      }
+    }
+  </script>
+</body>
+</html>
