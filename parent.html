@@ -74,8 +74,17 @@ window.payNow = async function(studentId, due, processing) {
     totalDue: 0
   });
 
-  alert("Receipt Generated!");
+  // Google Sheet update
+  await fetch("https://script.google.com/macros/s/AKfycbzJvumeDzXE8DceFaqDW3VXGYGh6Jfg2HoUL_nQoysCe1O3Bapmz5tcrl1hg7wnjFyy3A/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      studentId: studentId,
+      amount: totalPayable,
+      date: new Date().toLocaleDateString()
+    })
+  });
+
+  alert("Receipt Generated & Sheet Updated!");
 
 }
-
 </script>
