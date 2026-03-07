@@ -52,8 +52,12 @@ window.checkDue = async function() {
     <button onclick="payNow('${studentId}', ${due}, ${processing})">
     Pay Now
     </button>
-    `;
-
+    `; }
+if (due === 0) {
+  document.getElementById("result").innerHTML =
+  "✅ No Due. Payment already completed.";
+  return;
+}
   } else {
 
     document.getElementById("result").innerHTML = "Student not found!";
